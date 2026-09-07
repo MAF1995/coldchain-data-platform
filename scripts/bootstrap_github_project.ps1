@@ -86,6 +86,7 @@ foreach ($definition in $fieldDefinitions) {
 
 $fields = (Invoke-Gh -Arguments @("project", "field-list", $projectNumber, "--owner", $Owner, "--limit", "100", "--format", "json") | ConvertFrom-Json).fields
 $milestoneField = Get-ProjectField -Fields $fields -Name "Jalon"
+$nativeStatusField = Get-ProjectField -Fields $fields -Name "Status"
 $statusField = Get-ProjectField -Fields $fields -Name "Statut de preuve"
 $responsibleField = Get-ProjectField -Fields $fields -Name "Responsable"
 $dueDateField = Get-ProjectField -Fields $fields -Name "Échéance"
@@ -105,23 +106,31 @@ $existingItems = (Invoke-Gh -Arguments @("project", "item-list", $projectNumber,
 
 foreach ($workItem in $workItems) {
     $marker = "[$($workItem.Id)]"
-    $alreadyPresent = $existingItems | Where-Object { $_.content.title -like "*$marker*" } | Select-Object -First 1
+    $alreadyPresent = $existingItems | Where-Object { $_.content.title.Contains($marker) } | Select-Object -First 1
     if ($alreadyPresent) {
         Write-Host "Déjà présent : $marker"
-        continue
+        $itemId = $alreadyPresent.id
     }
-
-    $itemTitle = "$marker $($workItem.Title)"
-    $itemBody = "Responsable : $Responsible`nJalon : $($workItem.Milestone)`nÉchéance : $($workItem.Due)`nStatut : $($workItem.Status)"
-    $itemId = (Invoke-Gh -Arguments @("project", "item-create", $projectNumber, "--owner", $Owner, "--title", $itemTitle, "--body", $itemBody, "--format", "json", "--jq", ".id")).Trim()
+    else {
+        $itemTitle = "$marker $($workItem.Title)"
+        $itemBody = "Responsable : $Responsible`nJalon : $($workItem.Milestone)`nÉchéance : $($workItem.Due)`nStatut : $($workItem.Status)"
+        $itemId = (Invoke-Gh -Arguments @("project", "item-create", $projectNumber, "--owner", $Owner, "--title", $itemTitle, "--body", $itemBody, "--format", "json", "--jq", ".id")).Trim()
+    }
 
     $milestoneOption = $milestoneField.options | Where-Object { $_.name -eq $workItem.Milestone } | Select-Object -First 1
     $statusOption = $statusField.options | Where-Object { $_.name -eq $workItem.Status } | Select-Object -First 1
-    if (-not $milestoneOption -or -not $statusOption) {
+    $nativeStatusName = switch ($workItem.Status) {
+        "Terminé" { "Done" }
+        "En cours" { "In Progress" }
+        default { "Todo" }
+    }
+    $nativeStatusOption = $nativeStatusField.options | Where-Object { $_.name -eq $nativeStatusName } | Select-Object -First 1
+    if (-not $milestoneOption -or -not $statusOption -or -not $nativeStatusOption) {
         throw "Option de champ introuvable pour $marker"
     }
 
     Invoke-Gh -Arguments @("project", "item-edit", "--id", $itemId, "--project-id", $projectId, "--field-id", $milestoneField.id, "--single-select-option-id", $milestoneOption.id) | Out-Null
+    Invoke-Gh -Arguments @("project", "item-edit", "--id", $itemId, "--project-id", $projectId, "--field-id", $nativeStatusField.id, "--single-select-option-id", $nativeStatusOption.id) | Out-Null
     Invoke-Gh -Arguments @("project", "item-edit", "--id", $itemId, "--project-id", $projectId, "--field-id", $statusField.id, "--single-select-option-id", $statusOption.id) | Out-Null
     Invoke-Gh -Arguments @("project", "item-edit", "--id", $itemId, "--project-id", $projectId, "--field-id", $responsibleField.id, "--text", $Responsible) | Out-Null
     Invoke-Gh -Arguments @("project", "item-edit", "--id", $itemId, "--project-id", $projectId, "--field-id", $dueDateField.id, "--date", $workItem.Due) | Out-Null

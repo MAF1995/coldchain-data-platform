@@ -12,6 +12,9 @@ permissions:
   contents: read
   packages: write
 
+env:
+  IMAGE_NAME: ghcr.io/maf1995/coldchain-data-platform/pharma-data-runtime
+
 jobs:
   quality:
     name: Tests Python, dbt et infrastructure
@@ -113,7 +116,7 @@ jobs:
           file: infra/runtime/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/pharma-data-runtime:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/pharma-data-runtime:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
           provenance: true
           sbom: true
