@@ -1,0 +1,12 @@
+pharma_coldchain:
+  target: local
+  outputs:
+    local:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '55432') | int }}"
+      user: "{{ env_var('PGUSER', 'pharma_data') }}"
+      password: "{{ env_var('PGPASSWORD', 'pharma_local_only') }}"
+      dbname: "{{ env_var('PGDATABASE', 'pharma_analytics') }}"
+      schema: "{{ env_var('DBT_SCHEMA', 'analytics') }}"
+      threads: 4

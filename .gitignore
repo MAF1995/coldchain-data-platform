@@ -1,0 +1,29 @@
+# Environnements et secrets locaux
+.venv/
+.env
+.env.*
+!.env.example
+
+# Données, traces et exports produits lors des recettes
+data/raw/
+data/processed/
+logs/
+dist/
+docs/GIF/
+*.log
+
+# Artefacts Python et éditeur
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.vscode/
+
+# Artefacts dbt reconstruits à l'exécution
+dbt/target/
+dbt/logs/
+dbt/.user.yml
+
+# Sauvegardes locales de rédaction
+docs/backups/
+docs/*.ecrase_*.md

@@ -1,0 +1,46 @@
+groups:
+  - name: pharma-data-pipeline
+    interval: 15s
+    rules:
+      - alert: PipelineComponentUnavailable
+        expr: up{job=~"mqtt-kafka-bridge|kafka-postgres-consumer"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Composant d'ingestion indisponible"
+          description: "Prometheus ne peut plus joindre {{ $labels.job }} depuis une minute."
+
+      - alert: PipelineNoRecentMqttEvent
+        expr: time() - pipeline_last_event_timestamp_seconds{component="mqtt_kafka_bridge"} > 120
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Absence de mesure MQTT récente"
+          description: "Aucun événement MQTT valide n'a été reçu depuis plus de deux minutes."
+
+      - alert: PipelineKafkaConsumerLagHigh
+        expr: max(pipeline_kafka_consumer_lag) > 100
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Retard Kafka élevé"
+          description: "Le retard du groupe consommateur dépasse 100 messages."
+
+      - alert: PipelineDeliveryError
+        expr: increase(pipeline_kafka_delivery_errors_total[5m]) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: "Erreur de livraison Kafka"
+          description: "Au moins une publication MQTT vers Kafka a échoué durant les cinq dernières minutes."
+
+      - alert: PipelineDeadLetterQueueActivity
+        expr: increase(pipeline_dlq_messages_total[5m]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "Message envoyé en quarantaine"
+          description: "Un message invalide a été dirigé vers la DLQ durant les cinq dernières minutes."

@@ -1,0 +1,32 @@
+name: pharma_coldchain
+version: "1.0.0"
+config-version: 2
+
+profile: pharma_coldchain
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  pharma_coldchain:
+    staging:
+      +materialized: view
+      +schema: clean
+    intermediate:
+      +materialized: view
+      +schema: clean
+    marts:
+      +materialized: table
+      +schema: analytics
+
+seeds:
+  pharma_coldchain:
+    +schema: reference
+    +quote_columns: false
+

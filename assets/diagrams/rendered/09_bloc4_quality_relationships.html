@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+html, body { margin: 0; width: 1600px; height: 900px; background: #f7fbfb; }
+body { display: grid; place-items: center; font-family: Garamond, Georgia, serif; }
+.mermaid { width: 1450px; padding: 36px; text-align: center; }
+.mermaid svg { width: 100%; height: auto; max-height: 780px; }
+</style></head><body>
+<div class="mermaid">flowchart LR
+    R[(Brut)] --&gt; T[dbt : typer et normaliser]
+    T --&gt; X[Tests de données]
+    X --&gt; G{Barrière qualité}
+    G --&gt;|conforme| A[(Marts qualité)]
+    G --&gt;|écart| E[Preuve bloquée]
+    O[Airflow] -. orchestre .-&gt; T
+    O -. orchestre .-&gt; X
+    O -. publie .-&gt; A
+    P[Prometheus] -. observe .-&gt; O
+    P -. alerte .-&gt; E
+
+    classDef data fill:#eef8fd,stroke:#2f9fd0,color:#20343c;
+    classDef process fill:#e8f8f4,stroke:#43c6b6,color:#20343c;
+    classDef control fill:#fff0d3,stroke:#e6a73a,color:#20343c;
+    classDef risk fill:#fff7e8,stroke:#e6a73a,color:#20343c;
+    class R,A data;
+    class T,O,P process;
+    class X,G control;
+    class E risk;
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({startOnLoad: false, securityLevel: 'loose', theme: 'base'});
+window.addEventListener('load', async () => {
+  await mermaid.run({querySelector: '.mermaid'});
+  document.body.setAttribute('data-mermaid-rendered', 'true');
+});
+</script></body></html>

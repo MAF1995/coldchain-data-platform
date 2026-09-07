@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pharma-analytics-postgres
+    environment:
+      POSTGRES_DB: pharma_analytics
+      POSTGRES_USER: pharma_data
+      POSTGRES_PASSWORD: pharma_local_only
+    ports:
+      - "55432:5432"
+    volumes:
+      - pharma_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharma_data -d pharma_analytics"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  metabase-app-db:
+    image: postgres:16-alpine
+    container_name: pharma-metabase-postgres
+    environment:
+      POSTGRES_DB: metabase_app
+      POSTGRES_USER: metabase_app
+      POSTGRES_PASSWORD: metabase_app_local_only
+    volumes:
+      - metabase_app_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U metabase_app -d metabase_app"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  metabase:
+    image: metabase/metabase:v0.63.2
+    container_name: pharma-quality-metabase
+    hostname: pharma-quality-metabase
+    depends_on:
+      postgres:
+        condition: service_healthy
+      metabase-app-db:
+        condition: service_healthy
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase_app
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase_app
+      MB_DB_PASS: metabase_app_local_only
+      MB_DB_HOST: metabase-app-db
+      JAVA_TIMEZONE: Europe/Paris
+      MB_ANON_TRACKING_ENABLED: "false"
+    ports:
+      - "3001:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 90s
+    restart: unless-stopped
+
+volumes:
+  pharma_postgres_data:
+  metabase_app_data:

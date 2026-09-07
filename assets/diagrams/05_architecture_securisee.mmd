@@ -1,0 +1,33 @@
+%%{init: {"theme": "base", "themeVariables": {"background": "#FFFFFF", "mainBkg": "#FFFFFF", "primaryColor": "#E8F8F4", "primaryBorderColor": "#43C6B6", "primaryTextColor": "#20343C", "secondaryColor": "#9EE7D2", "tertiaryColor": "#8FD3F4", "lineColor": "#2F9FD0", "defaultLinkColor": "#2F9FD0", "clusterBkg": "#F5FBFB", "clusterBorder": "#43C6B6", "nodeBorder": "#2F9FD0", "edgeLabelBackground": "#FFFFFF", "fontFamily": "Garamond"}}}%%
+flowchart LR
+    subgraph Z1[Zone capteurs]
+        S1(Capteurs entrepôt)
+        S2(Capteurs transport)
+    end
+
+    subgraph Z2[Zone ingestion]
+        MQTT(Broker MQTT TLS)
+        ING(Service ingestion)
+        Q(Quarantaine messages)
+    end
+
+    subgraph Z3[Zone data]
+        RAW(Stockage brut chiffré)
+        SQL[(PostgreSQL / TimescaleDB)]
+        DBT(dbt transformations)
+    end
+
+    subgraph Z4[Zone usage]
+        DASH(Dashboard qualité)
+        ALERT(Alertes)
+    end
+
+    S1 --> MQTT
+    S2 --> MQTT
+    MQTT --> ING
+    ING --> Q
+    ING --> RAW
+    ING --> SQL
+    SQL --> DBT
+    DBT --> DASH
+    DBT --> ALERT

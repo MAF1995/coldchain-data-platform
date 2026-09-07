@@ -1,0 +1,119 @@
+name: Data platform CI-CD
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  quality:
+    name: Tests Python, dbt et infrastructure
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: pharma_analytics
+          POSTGRES_USER: pharma_data
+          POSTGRES_PASSWORD: ci_only_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pharma_data -d pharma_analytics"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: pharma_analytics
+      PGUSER: pharma_data
+      PGPASSWORD: ci_only_password
+      DBT_SCHEMA: analytics
+    steps:
+      - name: Extraire le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer les dépendances de contrôle
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install -r infra/runtime/requirements.txt
+          pip install -r infra/airflow/requirements.txt
+
+      - name: Vérifier la syntaxe et les contrats Python
+        run: |
+          python -m py_compile src/*.py airflow/*.py spark/*.py scripts/*.py
+          python -m pytest
+
+      - name: Vérifier les manifestes et les configurations
+        run: |
+          python -m json.tool infra/grafana/dashboards/pharma-pipeline.json >/dev/null
+          docker compose -f compose.yml -f compose.infrastructure.yml config --quiet
+          docker run --rm --entrypoint promtool \
+            -v "$PWD/infra/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v3.13.0 \
+            check config /etc/prometheus/prometheus.yml
+
+      - name: Préparer la source PostgreSQL de recette
+        run: psql -v ON_ERROR_STOP=1 -f tests/fixtures/ci_raw_fixture.sql
+
+      - name: Construire et tester les modèles dbt
+        run: |
+          dbt seed --project-dir dbt --profiles-dir dbt
+          dbt run --project-dir dbt --profiles-dir dbt
+          dbt test --project-dir dbt --profiles-dir dbt
+          dbt source freshness --project-dir dbt --profiles-dir dbt
+
+      - name: Conserver les preuves dbt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-target-${{ github.run_id }}
+          path: dbt/target
+          if-no-files-found: warn
+
+  delivery:
+    name: Construire et publier l'image d'exécution
+    needs: quality
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Extraire le dépôt
+        uses: actions/checkout@v4
+
+      - name: Préparer Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Se connecter au registre GitHub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construire et publier l'image versionnée
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/runtime/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/pharma-data-runtime:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/pharma-data-runtime:latest
+          provenance: true
+          sbom: true

@@ -1,0 +1,78 @@
+{
+  "executed_at_utc": "2026-09-03T10:49:04.305379+00:00",
+  "spark_version": "4.2.0",
+  "spark_master": "spark://spark-master:7077",
+  "default_parallelism": 2,
+  "raw_event_count": 527,
+  "eligible_event_count": 186,
+  "output_row_count": 6,
+  "output_path": "/opt/spark/data/curated/quality_daily_parquet",
+  "status": "PASSED",
+  "sample": [
+    {
+      "observation_date": "2026-07-01",
+      "site_id": "042",
+      "zone": "Chambre froide qualifiée",
+      "room_id": "CF-008",
+      "eligible_reading_count": 42,
+      "compliant_reading_count": 40,
+      "too_cold_reading_count": 1,
+      "too_hot_reading_count": 1,
+      "average_temperature_c": 5.187,
+      "maximum_deviation_c": 3.01,
+      "temperature_compliance_rate_pct": 95.24
+    },
+    {
+      "observation_date": "2026-07-01",
+      "site_id": "042",
+      "zone": "Quai expédition froid",
+      "room_id": "QF-002",
+      "eligible_reading_count": 38,
+      "compliant_reading_count": 38,
+      "too_cold_reading_count": 0,
+      "too_hot_reading_count": 0,
+      "average_temperature_c": 5.26,
+      "maximum_deviation_c": 0.0,
+      "temperature_compliance_rate_pct": 100.0
+    },
+    {
+      "observation_date": "2026-07-02",
+      "site_id": "042",
+      "zone": "Chambre froide qualifiée",
+      "room_id": "CF-008",
+      "eligible_reading_count": 15,
+      "compliant_reading_count": 15,
+      "too_cold_reading_count": 0,
+      "too_hot_reading_count": 0,
+      "average_temperature_c": 5.06,
+      "maximum_deviation_c": 0.0,
+      "temperature_compliance_rate_pct": 100.0
+    },
+    {
+      "observation_date": "2026-07-02",
+      "site_id": "042",
+      "zone": "Quai expédition froid",
+      "room_id": "QF-002",
+      "eligible_reading_count": 24,
+      "compliant_reading_count": 24,
+      "too_cold_reading_count": 0,
+      "too_hot_reading_count": 0,
+      "average_temperature_c": 5.201,
+      "maximum_deviation_c": 0.0,
+      "temperature_compliance_rate_pct": 100.0
+    },
+    {
+      "observation_date": "2026-08-24",
+      "site_id": "042",
+      "zone": "Chambre froide qualifiée",
+      "room_id": "CF-008",
+      "eligible_reading_count": 29,
+      "compliant_reading_count": 28,
+      "too_cold_reading_count": 1,
+      "too_hot_reading_count": 0,
+      "average_temperature_c": 4.946,
+      "maximum_deviation_c": 0.74,
+      "temperature_compliance_rate_pct": 96.55
+    }
+  ]
+}

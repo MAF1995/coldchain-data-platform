@@ -1,0 +1,20 @@
+flowchart LR
+    R[(Brut)] --> T[dbt : typer et normaliser]
+    T --> X[Tests de données]
+    X --> G{Barrière qualité}
+    G -->|conforme| A[(Marts qualité)]
+    G -->|écart| E[Preuve bloquée]
+    O[Airflow] -. orchestre .-> T
+    O -. orchestre .-> X
+    O -. publie .-> A
+    P[Prometheus] -. observe .-> O
+    P -. alerte .-> E
+
+    classDef data fill:#eef8fd,stroke:#2f9fd0,color:#20343c;
+    classDef process fill:#e8f8f4,stroke:#43c6b6,color:#20343c;
+    classDef control fill:#fff0d3,stroke:#e6a73a,color:#20343c;
+    classDef risk fill:#fff7e8,stroke:#e6a73a,color:#20343c;
+    class R,A data;
+    class T,O,P process;
+    class X,G control;
+    class E risk;

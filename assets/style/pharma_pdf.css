@@ -1,0 +1,379 @@
+/* Charte visuelle - Dossiers Pharma Cold Chain
+   Palette composite : vert aquamarin -> bleu ciel.
+   Typographie cible : Garamond light, avec fallback serif.
+*/
+
+:root {
+  --aqua-500: #43c6b6;
+  --mint-300: #9ee7d2;
+  --seafoam-100: #e8f8f4;
+  --sky-300: #8fd3f4;
+  --sky-600: #2f9fd0;
+  --ink: #20343c;
+  --muted: #6a7d86;
+  --line: #d8ecec;
+  --paper: #ffffff;
+}
+
+@page {
+  size: A4;
+  margin: 15mm 12mm 15mm 12mm;
+}
+
+body {
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Garamond, "EB Garamond", "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 10.5pt;
+  line-height: 1.3;
+}
+
+.cover {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-top: 9px solid var(--aqua-500);
+  border-bottom: 2px solid var(--sky-300);
+  padding: 12mm 8mm;
+}
+
+.cover h1 {
+  color: var(--sky-600);
+  font-size: 24pt;
+  font-weight: 300;
+  margin-bottom: 7mm;
+}
+
+.cover h2 {
+  color: var(--ink);
+  font-size: 16pt;
+  font-weight: 300;
+  max-width: 145mm;
+}
+
+h1, h2, h3 {
+  font-weight: 300;
+  color: var(--sky-600);
+}
+
+h2 {
+  border-left: 5px solid var(--aqua-500);
+  padding-left: 8px;
+  margin-top: 14px;
+}
+
+h3 {
+  color: var(--aqua-500);
+  margin-top: 10px;
+}
+
+a {
+  color: var(--sky-600);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 105mm;
+  height: auto;
+  margin: 7px auto 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(32, 52, 60, 0.06);
+}
+
+figure {
+  margin: 8px auto 11px;
+  text-align: center;
+  break-inside: avoid;
+}
+
+figure img {
+  margin-bottom: 4px;
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 8.8pt;
+  line-height: 1.2;
+}
+
+.figure-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 7mm;
+  margin: 8px 0 12px;
+  break-inside: avoid;
+}
+
+.figure-pair figure {
+  margin: 0;
+}
+
+.figure-pair-facts img {
+  width: auto;
+  max-height: 124mm;
+  object-fit: contain;
+}
+
+.figure-compact {
+  max-width: 118mm;
+}
+
+.figure-compact img {
+  max-height: 82mm;
+  object-fit: contain;
+}
+
+.timeline,
+.timeline-summary {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 10px;
+  margin: 8px 0 12px;
+  padding: 6px 0;
+}
+
+.timeline::before,
+.timeline-summary::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: calc(50% - 1px);
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 12mm 1fr;
+  align-items: center;
+  gap: 6px;
+  min-height: 9mm;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #f5fbfb;
+  box-shadow: 0 4px 16px rgba(32, 52, 60, 0.05);
+  break-inside: avoid;
+}
+
+.timeline-item:nth-child(odd) {
+  background: #edf9f6;
+}
+
+.timeline-item:nth-child(even) {
+  background: #eef8fd;
+}
+
+.timeline-item span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10mm;
+  height: 10mm;
+  border-radius: 50%;
+  background: var(--sky-600);
+  color: #ffffff;
+  font-size: 8.3pt;
+  font-weight: 600;
+}
+
+.timeline-item p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 9.3pt;
+  line-height: 1.12;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 8px 0 10px;
+  font-size: 9.3pt;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(32, 52, 60, 0.06);
+}
+
+.markdown-preview table,
+.vscode-body table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 9px !important;
+  overflow: hidden !important;
+}
+
+th {
+  background: #bfeee6;
+  color: var(--ink);
+  text-align: left;
+  font-weight: 600;
+}
+
+td, th {
+  padding: 4px 5px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+td:last-child,
+th:last-child {
+  border-right: 0;
+}
+
+thead tr:first-child th:first-child {
+  border-top-left-radius: 8px;
+}
+
+thead tr:first-child th:last-child {
+  border-top-right-radius: 8px;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+tbody td:nth-child(1) {
+  background: #f2fbf9;
+}
+
+tbody td:nth-child(2) {
+  background: #ecf8f6;
+}
+
+tbody td:nth-child(3) {
+  background: #e7f6f3;
+}
+
+tbody td:nth-child(4) {
+  background: #e1f4f1;
+}
+
+tbody td:nth-child(5) {
+  background: #dcf1ef;
+}
+
+tbody td:nth-child(n + 6) {
+  background: #d7efed;
+}
+
+tbody tr:nth-child(even) td:nth-child(1) {
+  background: #e9f8f5;
+}
+
+tbody tr:nth-child(even) td:nth-child(2) {
+  background: #e3f5f2;
+}
+
+tbody tr:nth-child(even) td:nth-child(3) {
+  background: #ddf2ef;
+}
+
+tbody tr:nth-child(even) td:nth-child(4) {
+  background: #d8f0ec;
+}
+
+tbody tr:nth-child(even) td:nth-child(5) {
+  background: #d2ede9;
+}
+
+tbody tr:nth-child(even) td:nth-child(n + 6) {
+  background: #cdebe6;
+}
+
+blockquote {
+  border-left: 4px solid var(--sky-300);
+  background: var(--seafoam-100);
+  padding: 6px 10px;
+  color: var(--ink);
+}
+
+.student-aside {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--aqua-500);
+  background: var(--seafoam-100);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin: 8px 0 11px;
+  color: var(--ink);
+  font-size: 10pt;
+}
+
+.student-aside p {
+  margin: 0;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 8.6pt;
+}
+
+pre {
+  background: #f5fbfb;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px;
+  overflow-x: auto;
+}
+
+.figure, .mermaid {
+  text-align: center;
+}
+
+.caption {
+  text-align: center;
+  color: var(--muted);
+  font-size: 9pt;
+  margin-top: 3px;
+}
+
+sup {
+  color: var(--sky-600);
+}
+
+@media print {
+  .cover {
+    min-height: 235mm;
+    break-after: page;
+  }
+
+  .page-break-before {
+    break-before: page;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  img,
+  table,
+  tr,
+  pre,
+  blockquote,
+  .timeline-item,
+  figure,
+  .figure-pair {
+    break-inside: avoid;
+  }
+}

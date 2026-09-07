@@ -1,0 +1,7 @@
+machine_type,measurement_context,threshold_min_c,threshold_max_c,temperature_rule_eligible,expected_interval_seconds
+hvac_cold_room,cold_storage,2.0,8.0,true,30
+sensor,cold_dispatch,2.0,8.0,true,30
+lyophilizer,process,,,false,30
+filling_line,process,,,false,30
+autoclave,process,,,false,30
+compressor,utility,,,false,30

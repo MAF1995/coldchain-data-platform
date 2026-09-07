@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: stg_sensor_events
+    description: Événements MQTT typés et normalisés.
+    columns:
+      - name: raw_hash
+        tests:
+          - not_null
+          - unique
+      - name: machine_id
+        tests:
+          - not_null
+      - name: state
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["RUNNING", "IDLE", "ALARM"]
+      - name: machine_type
+        tests:
+          - relationships:
+              arguments:
+                to: ref('measurement_rules')
+                field: machine_type
+
+  - name: int_temperature_status
+    description: Mesures rapprochées de leur règle thermique applicable.
+    columns:
+      - name: temperature_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["OK", "TOO_COLD", "TOO_HOT", "NOT_APPLICABLE"]
+      - name: measurement_context
+        tests:
+          - not_null
+
+  - name: fct_sensor_reading
+    description: Table de faits des mesures qualifiées.
+    columns:
+      - name: raw_hash
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_temperature_excursion
+    description: Épisodes successifs de température hors plage.
+
+  - name: mart_quality_daily
+    description: Indicateurs quotidiens destinés au dashboard qualité.
+
+  - name: mart_batch_traceability
+    description: Synthèse des excursions observées pour chaque lot exposé.
+    columns:
+      - name: batch_id
+        tests:
+          - not_null
+          - unique

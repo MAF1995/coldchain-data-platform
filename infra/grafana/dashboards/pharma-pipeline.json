@@ -1,0 +1,152 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "fixedColor", "fixedColor": "#47c9b0"}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"expr": "sum(pipeline_mqtt_messages_received_total)", "legendFormat": "Messages", "refId": "A"}],
+      "title": "Messages reçus depuis MQTT",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "fixedColor", "fixedColor": "#42a5d9"}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "id": 2,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"expr": "sum(pipeline_kafka_messages_published_total)", "legendFormat": "Messages", "refId": "A"}],
+      "title": "Messages confirmés par Kafka",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "fixedColor", "fixedColor": "#188cb8"}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "id": 3,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"expr": "sum(pipeline_postgres_rows_inserted_total)", "legendFormat": "Lignes", "refId": "A"}],
+      "title": "Lignes intégrées dans PostgreSQL",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "#47c9b0", "value": null}, {"color": "#f2b84b", "value": 50}, {"color": "#d94b59", "value": 100}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "id": 4,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"expr": "max(pipeline_kafka_consumer_lag)", "legendFormat": "Messages", "refId": "A"}],
+      "title": "Retard maximal du consommateur",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "messages/s", "axisPlacement": "auto", "drawStyle": "line", "fillOpacity": 12, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 4, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}}, "unit": "ops"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 16, "x": 0, "y": 4},
+      "id": 5,
+      "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {"expr": "rate(pipeline_mqtt_messages_received_total[1m])", "legendFormat": "MQTT reçus", "refId": "A"},
+        {"expr": "rate(pipeline_kafka_messages_published_total[1m])", "legendFormat": "Kafka publiés", "refId": "B"},
+        {"expr": "rate(pipeline_kafka_messages_consumed_total[1m])", "legendFormat": "Kafka consommés", "refId": "C"},
+        {"expr": "rate(pipeline_postgres_rows_inserted_total[1m])", "legendFormat": "PostgreSQL insérés", "refId": "D"}
+      ],
+      "title": "Débit de bout en bout",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "#47c9b0", "value": null}, {"color": "#f2b84b", "value": 60}, {"color": "#d94b59", "value": 120}]}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 4},
+      "id": 6,
+      "options": {"minVizHeight": 75, "minVizWidth": 75, "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true, "sizing": "auto"},
+      "targets": [{"expr": "time() - max(pipeline_last_event_timestamp_seconds{component=\"kafka_postgres_consumer\"})", "legendFormat": "Fraîcheur", "refId": "A"}],
+      "title": "Âge de la dernière donnée intégrée",
+      "type": "gauge"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "incidents/5 min", "axisPlacement": "auto", "drawStyle": "bars", "fillOpacity": 45, "lineWidth": 1, "pointSize": 4, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "normal"}}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 12, "x": 0, "y": 12},
+      "id": 7,
+      "options": {"legend": {"calcs": ["sum"], "displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {"expr": "increase(pipeline_bridge_messages_rejected_total[5m])", "legendFormat": "Rejets {{reason}}", "refId": "A"},
+        {"expr": "increase(pipeline_kafka_delivery_errors_total[5m])", "legendFormat": "Erreurs Kafka", "refId": "B"},
+        {"expr": "increase(pipeline_consumer_errors_total[5m])", "legendFormat": "Erreurs {{stage}}", "refId": "C"},
+        {"expr": "increase(pipeline_dlq_messages_total[5m])", "legendFormat": "DLQ {{reason}}", "refId": "D"}
+      ],
+      "title": "Rejets, erreurs et mises en quarantaine",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "continuous-GrYlRd"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "secondes", "axisPlacement": "auto", "drawStyle": "line", "fillOpacity": 20, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 4, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 12, "x": 12, "y": 12},
+      "id": 8,
+      "options": {"legend": {"calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"expr": "histogram_quantile(0.95, sum by (le) (rate(pipeline_message_processing_seconds_bucket[5m])))", "legendFormat": "p95", "refId": "A"}],
+      "title": "Latence de traitement au percentile 95",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "postgres-events"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 19},
+      "id": 9,
+      "options": {"cellHeight": "sm", "showHeader": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT event_time AS \"Horodatage\", machine_id AS \"Machine\", zone AS \"Zone\", room_id AS \"Salle\", temperature_c AS \"Température °C\", state AS \"État\", COALESCE(alarm_code, '-') AS \"Alarme\" FROM raw.mqtt_sensor_event WHERE $__timeFilter(event_time) ORDER BY event_time DESC LIMIT 12", "refId": "A"}],
+      "title": "Derniers signaux MQTT intégrés",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "postgres-events"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "auto"}, "unit": "celsius"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 19},
+      "id": 10,
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi"}},
+      "targets": [{"format": "time_series", "rawQuery": true, "rawSql": "SELECT event_time AS time, temperature_c AS value, room_id AS metric FROM raw.mqtt_sensor_event WHERE $__timeFilter(event_time) AND temperature_c IS NOT NULL ORDER BY 1", "refId": "A"}],
+      "title": "Température reçue par emplacement",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "postgres-events"},
+      "description": "La fourchette observée est calculée sur la période affichée. Les zones froides utilisent la référence 2–8 °C ; les autres zones utilisent une plage technique de procédé, distincte d'un critère de conformité de lot.",
+      "fieldConfig": {"defaults": {"decimals": 1, "unit": "celsius"}, "overrides": [{"matcher": {"id": "byName", "options": "État"}, "properties": [{"id": "mappings", "value": [{"options": {"Alerte": {"color": "orange", "index": 0}, "Dans la plage": {"color": "green", "index": 1}}, "type": "value"}]}]}]},
+      "gridPos": {"h": 7, "w": 24, "x": 0, "y": 27},
+      "id": 12,
+      "options": {"cellHeight": "sm", "showHeader": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "WITH readings AS (SELECT room_id, event_time, temperature_c FROM raw.mqtt_sensor_event WHERE $__timeFilter(event_time) AND room_id IS NOT NULL AND temperature_c IS NOT NULL), summary AS (SELECT room_id, MIN(temperature_c) AS min_observee_c, MAX(temperature_c) AS max_observee_c, (ARRAY_AGG(temperature_c ORDER BY event_time DESC))[1] AS temperature_actuelle_c FROM readings GROUP BY room_id), reference_range AS (SELECT room_id, CASE WHEN room_id IN ('CF-008', 'QF-002') THEN 2.0 ELSE 18.0 END AS reference_min_c, CASE WHEN room_id IN ('CF-008', 'QF-002') THEN 8.0 ELSE 24.0 END AS reference_max_c FROM summary) SELECT s.room_id AS \"Salle\", s.min_observee_c AS \"Min observé\", s.temperature_actuelle_c AS \"Actuel\", s.max_observee_c AS \"Max observé\", r.reference_min_c AS \"Réf. min\", r.reference_max_c AS \"Réf. max\", CASE WHEN s.temperature_actuelle_c < r.reference_min_c OR s.temperature_actuelle_c > r.reference_max_c THEN 'Alerte' ELSE 'Dans la plage' END AS \"État\" FROM summary s JOIN reference_range r USING (room_id) ORDER BY s.room_id", "refId": "A"}],
+      "title": "Plage observée et référence thermique par salle",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "postgres-events"},
+      "description": "CF-008 et QF-002 sont évaluées selon la plage 2–8 °C. Les zones de procédé restent neutres car elles ne portent pas de règle de conformité thermique dans le référentiel.",
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "decimals": 1, "thresholds": {"mode": "absolute", "steps": [{"color": "#F2B84B", "value": null}, {"color": "#43C6B6", "value": 2}, {"color": "#F2B84B", "value": 8}]}, "unit": "celsius"}, "overrides": [{"matcher": {"id": "byName", "options": "A-120"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#7E9EAD"}}]}, {"matcher": {"id": "byName", "options": "A-135"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#7E9EAD"}}]}, {"matcher": {"id": "byName", "options": "B-020"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#7E9EAD"}}]}, {"matcher": {"id": "byName", "options": "U-014"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "#7E9EAD"}}]}]},
+      "gridPos": {"h": 6, "w": 24, "x": 0, "y": 34},
+      "id": 11,
+      "options": {"displayMode": "gradient", "orientation": "vertical", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showUnfilled": false, "sizing": "auto", "text": {}},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "WITH latest_by_room AS (SELECT DISTINCT ON (room_id) room_id, temperature_c FROM raw.mqtt_sensor_event WHERE $__timeFilter(event_time) AND room_id IS NOT NULL AND temperature_c IS NOT NULL ORDER BY room_id, event_time DESC) SELECT MAX(temperature_c) FILTER (WHERE room_id = 'A-120') AS \"A-120\", MAX(temperature_c) FILTER (WHERE room_id = 'A-135') AS \"A-135\", MAX(temperature_c) FILTER (WHERE room_id = 'B-020') AS \"B-020\", MAX(temperature_c) FILTER (WHERE room_id = 'CF-008') AS \"CF-008\", MAX(temperature_c) FILTER (WHERE room_id = 'QF-002') AS \"QF-002\", MAX(temperature_c) FILTER (WHERE room_id = 'U-014') AS \"U-014\" FROM latest_by_room", "refId": "A"}],
+      "title": "Mosaïque thermique des salles",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": ["pharma", "data-engineering", "kafka", "mqtt"],
+  "templating": {"list": []},
+  "time": {"from": "now-30m", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Chaîne du froid - Supervision du pipeline",
+  "uid": "pharma-coldchain-pipeline",
+  "version": 2
+}

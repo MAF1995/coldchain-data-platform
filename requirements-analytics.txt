@@ -1,0 +1,12 @@
+# Bloc 2 - analyse, statistiques et restitution
+pandas>=2.2,<3
+scipy>=1.13,<2
+matplotlib>=3.8,<4
+seaborn>=0.13,<1
+jupyterlab>=4.2,<5
+nbformat>=5.10,<6
+nbclient>=0.10,<1
+SQLAlchemy>=2,<3
+psycopg[binary]>=3.2,<4
+dbt-core>=1.11,<1.12
+dbt-postgres>=1.11,<1.12

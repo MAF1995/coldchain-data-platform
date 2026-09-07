@@ -1,0 +1,11 @@
+%%{init: {"theme": "base", "themeVariables": {"background": "#FFFFFF", "mainBkg": "#FFFFFF", "primaryColor": "#E8F8F4", "primaryBorderColor": "#43C6B6", "primaryTextColor": "#20343C", "secondaryColor": "#9EE7D2", "tertiaryColor": "#8FD3F4", "lineColor": "#2F9FD0", "defaultLinkColor": "#2F9FD0", "clusterBkg": "#F5FBFB", "clusterBorder": "#43C6B6", "nodeBorder": "#2F9FD0", "edgeLabelBackground": "#FFFFFF", "fontFamily": "Garamond"}}}%%
+flowchart TD
+    A(Mesures MQTT en continu) --> B(Ingestion raw_events)
+    B --> C(Validation technique)
+    C --> D(Insertion mesures horodatées)
+    E(DAG Airflow quotidien) --> F(Sync ERP / WMS)
+    E --> G(API météo / transporteur)
+    E --> H(Contrôles dbt)
+    D --> I(Détection excursions)
+    H --> I
+    I --> J(Alerte qualité)

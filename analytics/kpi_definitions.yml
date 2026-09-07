@@ -1,0 +1,96 @@
+version: 1
+
+decision:
+  question: >-
+    Quels facteurs opérationnels favorisent les excursions de température
+    dans les zones fixes du site pharmaceutique, et quelles actions doivent
+    être priorisées pour réduire ce risque ?
+  commanditaire: Responsable qualité et logistique
+  scope:
+    included:
+      - Chambres froides
+      - Quais d'expédition sous température dirigée
+      - Équipements frigorifiques associés
+    excluded:
+      - Températures de procédé des autoclaves, lyophilisateurs et lignes de remplissage
+      - Données géographiques précises
+      - Décision finale de libération ou de destruction d'un lot
+
+primary_kpis:
+  - name: temperature_compliance_rate
+    label: Taux de conformité thermique
+    definition: >-
+      Part des mesures éligibles comprises entre la borne basse et la borne
+      haute applicables à la zone ou au produit.
+    formula: compliant_readings / eligible_readings
+    unit: percent
+    grain: day, zone
+    source_model: mart_quality_daily
+    owner: Qualité
+    decision_use: Identifier les zones nécessitant une investigation prioritaire.
+    guardrail: data_coverage_rate
+
+  - name: excursion_degree_minutes
+    label: Exposition thermique cumulée
+    definition: >-
+      Somme, pour chaque épisode, de l'écart à la borne autorisée multiplié
+      par sa durée. Cet indicateur distingue un dépassement bref d'un écart
+      durable et important.
+    formula: >-
+      sum(temperature_deviation_c * represented_duration_minutes), avec une
+      durée représentée plafonnée à l'intervalle attendu du capteur
+    unit: degree_celsius_minute
+    grain: excursion, lot, zone
+    source_model: fct_temperature_excursion
+    owner: Qualité
+    decision_use: Classer les excursions selon leur sévérité technique.
+    guardrail: threshold_reference_coverage_rate
+
+  - name: exposed_batch_rate
+    label: Taux de lots exposés
+    definition: >-
+      Part des lots surveillés associés à au moins une excursion confirmée
+      pendant la période étudiée.
+    formula: exposed_batches / monitored_batches
+    unit: percent
+    grain: week, product_family
+    source_model: mart_batch_traceability
+    owner: Qualité et logistique
+    decision_use: Mesurer l'impact métier des incidents thermiques.
+    guardrail: batch_join_coverage_rate
+
+driver_metrics:
+  - name: excursion_count
+    label: Nombre d'excursions
+    grain: day, zone
+  - name: median_excursion_duration_minutes
+    label: Durée médiane des excursions
+    grain: week, zone
+  - name: maximum_excursion_duration_minutes
+    label: Durée maximale des excursions
+    grain: week, zone
+  - name: door_open_minutes
+    label: Durée d'ouverture de porte
+    grain: hour, zone
+    availability: future_capture
+  - name: outside_inside_temperature_delta_c
+    label: Écart entre température extérieure et intérieure
+    grain: hour, zone
+    availability: future_enrichment
+
+data_quality_guardrails:
+  - name: data_coverage_rate
+    definition: Mesures reçues divisées par les mesures attendues.
+    target: ">= 99 %"
+  - name: duplicate_event_rate
+    definition: Événements portant une empreinte brute déjà rencontrée.
+    target: "0 %"
+  - name: threshold_reference_coverage_rate
+    definition: Mesures éligibles reliées à une plage thermique validée.
+    target: "100 %"
+  - name: batch_join_coverage_rate
+    definition: Mesures devant être rattachées à un lot et effectivement appariées.
+    target: ">= 99 %"
+  - name: pipeline_freshness_minutes
+    definition: Délai entre la réception du dernier événement et sa disponibilité analytique.
+    target: "<= 15 minutes"

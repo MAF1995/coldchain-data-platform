@@ -1,0 +1,23 @@
+flowchart LR
+    MQTT(Broker MQTT) --> KAFKA[(Kafka)]
+    KAFKA --> RAW[(Événements bruts)]
+    RAW --> LOAD[Chargement contrôlé]
+    LOAD --> PGRAW[(PostgreSQL raw)]
+    PGRAW --> DBT[dbt : typage et règles]
+    DBT --> CLEAN[(Mesures qualifiées)]
+    CLEAN --> MARTS[(Tables analytiques)]
+    MARTS --> NOTEBOOK[Jupyter : tests statistiques]
+    MARTS --> POWERBI[Power BI : dashboard qualité]
+    AIRFLOW[Airflow] -. orchestre .-> LOAD
+    AIRFLOW -. orchestre .-> DBT
+
+    classDef source fill:#E8F8F4,stroke:#2F9FD0,color:#143642
+    classDef process fill:#9EE7D2,stroke:#2F9FD0,color:#143642
+    classDef storage fill:#8FD3F4,stroke:#2F9FD0,color:#143642
+    classDef output fill:#43C6B6,stroke:#147D75,color:#143642
+
+    class MQTT,KAFKA source
+    class LOAD,DBT,AIRFLOW process
+    class RAW,PGRAW,CLEAN,MARTS storage
+    class NOTEBOOK,POWERBI output
+

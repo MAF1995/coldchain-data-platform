@@ -1,0 +1,56 @@
+{
+  "allowed_topic_prefixes": [
+    "pharma/production/site-042/",
+    "pharma/coldchain/site-042/"
+  ],
+  "machine_keywords": [
+    "lyophilizer",
+    "freeze_dryer",
+    "filling_line",
+    "autoclave",
+    "blister_packer",
+    "cip_skid",
+    "hvac_cold_room",
+    "compressor",
+    "conveyor",
+    "sensor",
+    "plc",
+    "scada",
+    "batch",
+    "lot"
+  ],
+  "signal_fields": [
+    "temperature_c",
+    "humidity_pct",
+    "pressure_bar",
+    "vibration_mm_s",
+    "motor_current_a",
+    "rpm",
+    "state",
+    "alarm_code",
+    "batch_id",
+    "lot_id",
+    "machine_id",
+    "oee",
+    "cycle_count"
+  ],
+  "known_suppliers": [
+    "Siemens",
+    "Schneider Electric",
+    "Rockwell Automation",
+    "Emerson",
+    "ABB",
+    "Endress+Hauser",
+    "ifm",
+    "SICK",
+    "Keyence",
+    "Beckhoff",
+    "WAGO",
+    "Omron",
+    "Bosch Rexroth",
+    "GEA",
+    "Getinge",
+    "IMA Group",
+    "Syntegon"
+  ]
+}

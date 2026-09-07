@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: Événements MQTT conservés avant transformation analytique.
+    tables:
+      - name: mqtt_sensor_event
+        description: Une ligne par empreinte de message MQTT reçue.
+        loaded_at_field: loaded_at
+        config:
+          freshness:
+            warn_after: {count: 30, period: minute}
+            error_after: {count: 2, period: hour}
+        columns:
+          - name: raw_hash
+            tests:
+              - not_null
+              - unique
+          - name: event_time
+            tests:
+              - not_null
+          - name: machine_id
+            tests:
+              - not_null
+

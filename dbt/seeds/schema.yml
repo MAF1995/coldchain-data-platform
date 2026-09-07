@@ -1,0 +1,17 @@
+version: 2
+
+seeds:
+  - name: measurement_rules
+    description: Référentiel des contextes de mesure et des règles thermiques.
+    columns:
+      - name: machine_type
+        tests:
+          - not_null
+          - unique
+      - name: measurement_context
+        tests:
+          - not_null
+      - name: temperature_rule_eligible
+        tests:
+          - not_null
+

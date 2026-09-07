@@ -1,0 +1,17 @@
+flowchart LR
+    S[Signal machine] --> M[Entrée MQTT]
+    M --> V{Contrat valide ?}
+    V -->|non| D[DLQ]
+    V -->|oui| K[(Kafka)]
+    K --> C[Consommateur]
+    C --> P[(PostgreSQL)]
+    P --> Q[Qualité et pilotage]
+
+    classDef input fill:#fff0d3,stroke:#43c6b6,color:#20343c;
+    classDef service fill:#e8f8f4,stroke:#43c6b6,color:#20343c;
+    classDef store fill:#eef8fd,stroke:#2f9fd0,color:#20343c;
+    classDef risk fill:#fff7e8,stroke:#e6a73a,color:#20343c;
+    class S,M,C,Q input;
+    class V service;
+    class K,P store;
+    class D risk;

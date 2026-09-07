@@ -1,0 +1,291 @@
+:root {
+  --aqua-500: #43c6b6;
+  --mint-300: #9ee7d2;
+  --seafoam-100: #e8f8f4;
+  --sky-300: #8fd3f4;
+  --sky-600: #2f9fd0;
+  --ink: #20343c;
+  --muted: #647982;
+  --line: #d8ecec;
+  --paper: #ffffff;
+}
+
+@page {
+  size: A4 landscape;
+  margin: 9mm 10mm 12mm 10mm;
+}
+
+html,
+body {
+  background: var(--paper);
+}
+
+body {
+  max-width: none !important;
+  margin: 0 !important;
+  color: var(--ink);
+  font-family: Garamond, "EB Garamond", "Cormorant Garamond", Georgia, serif;
+  font-size: 15pt;
+  line-height: 1.2;
+  font-weight: 300;
+}
+
+.slide {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 179mm;
+  padding: 5mm 7mm 4mm;
+  overflow: hidden;
+  break-after: page;
+}
+
+.slide:last-of-type {
+  break-after: auto;
+}
+
+.cover-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-top: 10px solid var(--aqua-500);
+  border-bottom: 3px solid var(--sky-300);
+}
+
+.cover-slide h1 {
+  max-width: 245mm;
+  margin: 0 0 8mm;
+  color: var(--sky-600);
+  font-size: 34pt;
+  font-weight: 300;
+}
+
+.cover-slide h2 {
+  max-width: 225mm;
+  margin: 0 0 11mm;
+  border: 0;
+  color: var(--ink);
+  font-size: 23pt;
+}
+
+.cover-slide p {
+  margin: 2mm 0;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: 0;
+  font-weight: 300;
+}
+
+.slide > h2 {
+  margin: 0 0 5mm;
+  padding-left: 4mm;
+  border-left: 5px solid var(--aqua-500);
+  color: var(--sky-600);
+  font-size: 25pt;
+}
+
+.slide h3 {
+  margin: 4mm 0 2mm;
+  color: var(--aqua-500);
+  font-size: 18pt;
+}
+
+.slide p {
+  margin: 2.5mm 0;
+}
+
+.lead {
+  max-width: 255mm;
+  margin: 4mm 0 6mm !important;
+  font-size: 18pt;
+  line-height: 1.25;
+}
+
+.columns-2,
+.columns-3,
+.metric-grid,
+.figure-pair {
+  display: grid;
+  gap: 6mm;
+  align-items: start;
+}
+
+.columns-2,
+.figure-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.columns-3,
+.metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metric {
+  min-height: 25mm;
+  padding: 4mm;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--seafoam-100);
+}
+
+.metric strong {
+  display: block;
+  color: var(--sky-600);
+  font-size: 25pt;
+  line-height: 1;
+}
+
+.metric span {
+  display: block;
+  margin-top: 2mm;
+  color: var(--ink);
+  font-size: 12pt;
+}
+
+.panel {
+  padding: 3.5mm 4mm;
+  border-left: 5px solid var(--aqua-500);
+  background: var(--seafoam-100);
+}
+
+table {
+  width: 100%;
+  margin: 3mm 0;
+  border: 1px solid var(--line);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 10.6pt;
+  line-height: 1.12;
+}
+
+th,
+td {
+  padding: 2.1mm 2.4mm;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  background: #bfeee6;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody td:nth-child(1) { background: #f2fbf9; }
+tbody td:nth-child(2) { background: #ecf8f6; }
+tbody td:nth-child(3) { background: #e7f6f3; }
+tbody td:nth-child(4) { background: #e1f4f1; }
+tbody td:nth-child(5) { background: #dcf1ef; }
+tbody td:nth-child(n + 6) { background: #d7efed; }
+
+tr:last-child td { border-bottom: 0; }
+th:last-child,
+td:last-child { border-right: 0; }
+
+ul,
+ol {
+  margin: 2mm 0 2mm 7mm;
+  padding-left: 4mm;
+}
+
+li {
+  margin: 1.3mm 0;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 9.5pt;
+}
+
+pre {
+  margin: 3mm 0;
+  padding: 3.5mm;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #f5fbfb;
+  font-size: 9.2pt;
+  line-height: 1.14;
+}
+
+img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 122mm;
+  margin: 3mm auto;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  object-fit: contain;
+}
+
+figure {
+  margin: 2mm 0;
+  text-align: center;
+}
+
+.figure-pair img {
+  max-height: 77mm;
+}
+
+figcaption,
+.caption {
+  margin-top: 1mm;
+  color: var(--muted);
+  font-size: 10pt;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.mermaid {
+  max-height: 128mm;
+  margin: 3mm 0 !important;
+  padding: 3mm !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: #f5fbfb !important;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100% !important;
+  max-height: 118mm !important;
+}
+
+.small {
+  font-size: 11pt;
+  line-height: 1.12;
+}
+
+.references {
+  font-size: 10pt;
+  line-height: 1.08;
+}
+
+.references p {
+  margin: 1.5mm 0;
+}
+
+sup {
+  color: var(--sky-600);
+}
+
+@media print {
+  .slide,
+  table,
+  pre,
+  figure,
+  .metric,
+  .panel,
+  .mermaid {
+    break-inside: avoid;
+  }
+}
