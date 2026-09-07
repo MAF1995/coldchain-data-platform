@@ -17,7 +17,7 @@ La recette combine des tests unitaires, des tests de contrat, des contrôles d'i
 | T07 | Collecte Prometheus | Les trois cibles attendues sont `up` | Page Targets et API | Réussi |
 | T08 | Règles d'alerte | Les cinq règles sont chargées sans erreur | Sortie `promtool check rules` | Réussi |
 | T09 | Dashboard Grafana | Le dashboard provisionné affiche les métriques du pipeline | Interface Grafana et API | Réussi |
-| T10 | CI/CD | Tests, dbt, manifeste, image et SBOM sont automatisés | Exécution GitHub Actions | À exécuter après publication du dépôt |
+| T10 | CI/CD | Tests, dbt, manifeste, image et SBOM sont automatisés | Run `workflow_dispatch` `34112884626`, artefact `dbt-target-34112884626`, image OCI au digest `sha256:d95aba66a9b56b5c3eb6dd9a5c0b3ae012aabb9b325244ad9b6a926d9d36a05d` | Réussi le 7 septembre 2026 |
 
 ## III. Seuils d'acceptation
 

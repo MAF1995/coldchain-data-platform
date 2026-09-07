@@ -29,3 +29,9 @@ ORDER BY fetched_at DESC;
 ```
 
 La documentation de l'API est disponible sur [Open-Meteo](https://open-meteo.com/en/docs).
+
+## III. Export de preuve
+
+![Export de preuve Open-Meteo](../assets/evidence/open_meteo_collection_snapshot.svg)
+
+Cet export est généré à partir du JSON effectivement conservé et de la ligne présente dans PostgreSQL. Il ne reproduit pas une interface Open-Meteo.

@@ -238,7 +238,10 @@ Pour la veille réglementaire, je ne retiens pas le crawling comme mécanisme pr
 
 La collecte externe a été validée avec l'API Open-Meteo, utilisée comme donnée de contexte lors de l'analyse d'une excursion thermique. Le 7 septembre 2026, la requête a renvoyé une observation horodatée pour le périmètre `site_id = 042`. La réponse JSON brute a été conservée avant toute transformation, avec l'URL effectivement appelée et l'empreinte SHA-256 `1b0f45aa82e0d186c340ad1fcadf38cf7b2ca6f03ff2616f17cf4cd5794c6878`. Son chargement idempotent a créé une ligne dans `raw.open_meteo_snapshot` : température `29,8 °C`, humidité relative `44 %`, heure observée `2026-09-07 10:15 UTC`. La documentation officielle de l'API est citée en bibliographie<sup>6</sup>.
 
-*Capture à insérer : exécution Open-Meteo, JSON brut et résultat de la requête dans `raw.open_meteo_snapshot`.*
+<figure>
+  <img src="../assets/evidence/open_meteo_collection_snapshot.svg" alt="Export de preuve montrant le fichier JSON Open-Meteo brut, son empreinte SHA-256 et la ligne chargée dans raw.open_meteo_snapshot">
+  <figcaption>Export de preuve de la collecte Open-Meteo : réponse JSON brute conservée puis retrouvée dans la zone <code>raw</code>. Les coordonnées du site ne sont pas affichées.</figcaption>
+</figure>
 
 ### e. Contrôles qualité dès la collecte
 

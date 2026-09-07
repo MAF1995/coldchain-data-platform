@@ -596,24 +596,35 @@ GitHub documente la construction et la publication d'images de conteneur comme u
 
 <section class="slide" markdown="1">
 
-## V.b. Ce qui est vérifié, et ce qui ne l'est pas encore
+## V.b. Exécution distante CI/CD
 
 | Étape | Exécutée sur la plateforme | Définie dans la CI distante |
 | --- | --- | --- |
 | Compilation des scripts | Oui | Oui |
-| Tests Python | Oui, `9/9` | Oui |
+| Tests Python | Oui, `10/10` | Oui |
 | Manifestes Compose et Prometheus | Oui | Oui |
 | dbt `seed/run/test/freshness` | Oui | Oui |
 | Construction de l'image | Oui lors des services | Oui, image versionnée |
-| Publication GHCR | Non | Oui |
-| SBOM et provenance | Non | Oui |
+| Publication GHCR | Oui | Oui |
+| SBOM et provenance | Oui | Oui |
 
-<p class="lead">Le workflow est implémenté dans le dépôt, mais aucune exécution GitHub distante n'est revendiquée.</p>
+<p class="lead">Le workflow a été exécuté manuellement le 7 septembre 2026 par <code>workflow_dispatch</code>, sur le commit <code>3a699df</code>. Le run <code>34112884626</code> est réussi : l'artefact <code>dbt-target-34112884626</code> contient vingt tests dbt réussis et l'image OCI est publiée sous le digest <code>sha256:d95aba66a9b56b5c3eb6dd9a5c0b3ae012aabb9b325244ad9b6a926d9d36a05d</code>.</p>
 
 <div class="columns-2">
-<div class="panel"><strong>Condition d'acceptation</strong><br>Publier le dépôt contrôlé, exécuter le workflow, conserver l'URL du run et vérifier l'image par son digest.</div>
+<div class="panel"><strong>Preuve conservée</strong><br>Run GitHub Actions privé, artefact dbt téléchargeable et digest OCI immuable.</div>
 <div class="panel"><strong>Retour arrière</strong><br>Redéployer le digest précédemment accepté ; ne jamais dépendre uniquement du tag `latest`.</div>
 </div>
+
+</section>
+
+<section class="slide" markdown="1">
+
+## V.c. Preuve d'exécution CI/CD
+
+<figure>
+  <img src="../assets/evidence/github_actions_snapshot.svg" alt="Export de preuve GitHub Actions d'un run workflow_dispatch réussi avec deux jobs verts, un artefact dbt et un digest OCI">
+  <figcaption>Export de preuve généré à partir du run GitHub Actions privé <code>34112884626</code> : exécution manuelle réussie, artefact dbt et digest OCI immuable.</figcaption>
+</figure>
 
 </section>
 
@@ -719,7 +730,7 @@ python .\scripts\collect_platform_evidence.py
 | ID | Famille | Test | Résultat |
 | --- | --- | --- | --- |
 | T01 | Structurel | Manifeste Compose valide | Réussi |
-| T02 | Fonctionnel | Contrats Python, empreinte et normalisation | `9/9` réussis |
+| T02 | Fonctionnel | Contrats Python, empreinte et normalisation | `10/10` réussis |
 | T03 | Intégration | MQTT → Kafka → PostgreSQL | Réussi |
 | T04 | Reprise | Rejeu sans doublon | Réussi |
 | T05 | Qualité | Airflow + dbt + barrière | Réussi |
@@ -727,12 +738,12 @@ python .\scripts\collect_platform_evidence.py
 | T07 | Supervision | Trois cibles Prometheus actives | Réussi |
 | T08 | Sécurité structurelle | Règles Prometheus valides | Réussi |
 | T09 | Visualisation | Dashboard provisionné | Réussi |
-| T10 | CI/CD distant | Run GitHub, image, SBOM | À exécuter après publication |
+| T10 | CI/CD distant | Run `workflow_dispatch`, artefact dbt, image, SBOM | Réussi : run `34112884626` |
 
 <div class="metric-grid">
-  <div class="metric"><strong>9</strong><span>tests automatisés Python</span></div>
+  <div class="metric"><strong>10</strong><span>tests automatisés Python</span></div>
   <div class="metric"><strong>20</strong><span>tests de données dbt</span></div>
-  <div class="metric"><strong>1</strong><span>écart explicitement non exécuté : CI distante</span></div>
+  <div class="metric"><strong>1</strong><span>run CI/CD manuel réussi</span></div>
 </div>
 
 </section>

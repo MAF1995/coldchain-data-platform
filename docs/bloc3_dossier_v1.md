@@ -257,7 +257,7 @@ La charge maximale du Data Engineer intervient entre les semaines quatre et huit
 | --- | --- | --- | ---: | --- |
 | Jalons techniques validés | jalons réussis / jalons prévus | 100 % avant recette | 8 / 8 | Conforme |
 | Couverture du flux | faits analytiques / messages bruts | 100 % | 527 / 527 | Conforme |
-| Tests de contrat | tests réussis / tests exécutés | 100 % | 9 / 9 | Conforme |
+| Tests de contrat | tests réussis / tests exécutés | 100 % | 10 / 10 | Conforme |
 | Tests dbt | tests réussis / tests exécutés | 100 % | 20 / 20 | Conforme |
 | Retard consommateur | messages non traités | < 100 | 0 | Conforme |
 | Cibles supervisées | cibles actives / cibles attendues | 100 % | 3 / 3 | Conforme |
@@ -265,7 +265,16 @@ La charge maximale du Data Engineer intervient entre les semaines quatre et huit
 
 Les indicateurs de résultat ne remplacent pas les indicateurs de pilotage. Le suivi hebdomadaire ajoute la charge consommée, la date prévisionnelle de chaque jalon, le nombre de blocages de plus de deux jours et la tendance budgétaire. Dans la mise en situation, le budget reste une projection ; je ne le présente donc pas comme une dépense réellement engagée.
 
-### b. Compte rendu court
+### b. Tableau de suivi outillé
+
+Le suivi est matérialisé dans un GitHub Project privé relié au dépôt versionné. Il comporte huit éléments identifiés de `PIL-01` à `PIL-08` et affiche, pour chacun, un jalon, un statut, un responsable et une échéance. Au 7 septembre 2026, les travaux de cadrage, d'ingestion, de transformation, d'observabilité, de collecte API et de CI/CD sont terminés ; la recette finale reste planifiée. Ce tableau complète le Gantt : il donne une lecture opérationnelle de l'avancement et conserve les responsables et les dates de décision.
+
+<figure>
+  <img src="../assets/evidence/github_projects_snapshot.svg" alt="Export de preuve GitHub Projects affichant les jalons, statuts, responsables et échéances du projet">
+  <figcaption>Export de preuve généré depuis le GitHub Project privé : huit jalons, responsable, échéance et statut au 7 septembre 2026.</figcaption>
+</figure>
+
+### c. Compte rendu court
 
 Chaque point hebdomadaire produit une page : décisions, risques, actions avec responsable et date, évolution du périmètre, puis statut qualité-coût-délai. Les journaux techniques restent attachés aux tickets. Le compte rendu ne copie pas les logs ; il traduit leur conséquence sur le projet.
 
@@ -487,4 +496,3 @@ Le principal résultat du bloc III est d'avoir transformé une suite de travaux 
 | C3.3.3 | XI | Arbitrage de capacité et réajustement |
 | C3.4.1 | XII | Méthode et résultat de veille |
 | C3.4.2 | XIII | Plan d'actions chiffré et priorisé |
-

@@ -98,7 +98,7 @@ $workItems = @(
     @{ Id = "PIL-04"; Title = "Transformations dbt et contrôles qualité"; Milestone = "Bloc II"; Status = "Terminé"; Due = "2026-07-07" },
     @{ Id = "PIL-05"; Title = "Kafka, Airflow, Spark et observabilité"; Milestone = "Bloc IV"; Status = "Terminé"; Due = "2026-07-24" },
     @{ Id = "PIL-06"; Title = "Collecte API Open-Meteo et traçabilité brute"; Milestone = "Bloc I"; Status = "Terminé"; Due = "2026-09-07" },
-    @{ Id = "PIL-07"; Title = "Exécution distante CI/CD et artefacts"; Milestone = "Bloc IV"; Status = "En cours"; Due = "2026-09-10" },
+    @{ Id = "PIL-07"; Title = "Exécution distante CI/CD et artefacts"; Milestone = "Bloc IV"; Status = "Terminé"; Due = "2026-09-07" },
     @{ Id = "PIL-08"; Title = "Recette finale et constitution des preuves"; Milestone = "Soutenance"; Status = "À faire"; Due = "2026-09-11" }
 )
 
@@ -106,14 +106,21 @@ $existingItems = (Invoke-Gh -Arguments @("project", "item-list", $projectNumber,
 
 foreach ($workItem in $workItems) {
     $marker = "[$($workItem.Id)]"
+    $itemTitle = "$marker $($workItem.Title)"
+    $itemBody = "Responsable : $Responsible`nJalon : $($workItem.Milestone)`nÉchéance : $($workItem.Due)`nStatut : $($workItem.Status)"
     $alreadyPresent = $existingItems | Where-Object { $_.content.title.Contains($marker) } | Select-Object -First 1
     if ($alreadyPresent) {
         Write-Host "Déjà présent : $marker"
         $itemId = $alreadyPresent.id
+        Invoke-Gh -Arguments @(
+            "api", "graphql",
+            "-f", 'query=mutation($draftIssueId:ID!,$title:String,$body:String){updateProjectV2DraftIssue(input:{draftIssueId:$draftIssueId,title:$title,body:$body}){draftIssue{id}}}',
+            "-F", "draftIssueId=$($alreadyPresent.content.id)",
+            "-F", "title=$itemTitle",
+            "-F", "body=$itemBody"
+        ) | Out-Null
     }
     else {
-        $itemTitle = "$marker $($workItem.Title)"
-        $itemBody = "Responsable : $Responsible`nJalon : $($workItem.Milestone)`nÉchéance : $($workItem.Due)`nStatut : $($workItem.Status)"
         $itemId = (Invoke-Gh -Arguments @("project", "item-create", $projectNumber, "--owner", $Owner, "--title", $itemTitle, "--body", $itemBody, "--format", "json", "--jq", ".id")).Trim()
     }
 
