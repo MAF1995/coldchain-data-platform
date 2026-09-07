@@ -20,7 +20,7 @@ from pptx.util import Inches, Pt
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT / "dist" / "bloc4_soutenance_FALIGANT_proposition_v2.pptx"
-DEFAULT_OUTPUT = ROOT / "dist" / "bloc4_soutenance_FALIGANT_proposition_v3_preuves.pptx"
+DEFAULT_OUTPUT = ROOT / "dist" / "Soutenance_RNCP_2026_Marc-Alfred_FALIGANT_Plateforme_Data_Chaine_du_Froid.pptx"
 EVIDENCE_DIRECTORY = ROOT / "assets" / "evidence"
 BACKGROUND = ROOT / "assets" / "style" / "bloc4_slide_background.png"
 RASTER_DIRECTORY = ROOT / "dist" / "presentation_evidence_raster"
